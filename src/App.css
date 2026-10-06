@@ -1,12 +1,18 @@
-/* General */
+/* ===== General ===== */
 * {
   box-sizing: border-box;
 }
 
+/* !important beats the starter template's index.css */
+html,
+body,
+#root {
+  background: #ffffff !important;
+}
+
 body {
   margin: 0;
-  font-family: 'Playfair Display', Georgia, serif;
-  background: linear-gradient(135deg, #FFE5B4 0%, #ffffff 100%);
+  font-family: Georgia, serif;
   color: #2b2b2b;
   min-height: 100vh;
 }
@@ -17,62 +23,93 @@ a {
 }
 
 
-/* Sticky Header */
+/* ===== Header ===== */
+/* ===== Header: brand centered, links centered underneath ===== */
 header {
   position: sticky;
   top: 0;
   z-index: 1000;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 24px 50px;
+  gap: 10px;
+  padding: 16px 20px 14px;
+  background: #ffffff;
   border-bottom: 1px solid #f0eae1;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.brand {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 32px;
-  color: #8c3b1e;
+  font-size: 2.2rem;
+  line-height: 1.2;
+  color: #1a1a1a;
   font-family: Georgia, serif;
 }
 
 .brand span {
-  display: block;
-  margin-top: 2px;
-  font-size: 14px;
-  color: #a67c69;
+  font-size: 1rem;
+  color: #8c3b1e;
   font-style: italic;
 }
 
 nav {
   display: flex;
-  align-items: center;
-  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 28px;
 }
 
 nav a {
-  font-size: 16px;
-  color: #4a4a4a;
+  position: relative;
+  padding-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #2b2b2b;
   transition: color 0.2s;
+}
+
+/* A thin brown line that grows under a link when you hover over it */
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #8c3b1e;
+  transition: width 0.25s;
 }
 
 nav a:hover {
   color: #8c3b1e;
 }
 
+nav a:hover::after {
+  width: 100%;
+}
 
-/* Stories dropdown */
+
+/* ===== Stories dropdown ===== */
 .stories {
   position: relative;
+  padding-bottom: 15px;
+  margin-bottom: -15px;
 }
 
 .dropdown {
   display: none;
   position: absolute;
-  top: 35px;
+  top: 100%;
   left: 0;
   min-width: 160px;
   background: white;
@@ -95,12 +132,22 @@ nav a:hover {
   color: #8c3b1e;
 }
 
-.stories:hover .dropdown {
-  display: block;
+/* Computers (with a mouse): open on hover */
+@media (hover: hover) {
+  .stories:hover .dropdown {
+    display: block;
+  }
+}
+
+/* Phones and tablets (touch): open when tapped */
+@media (hover: none) {
+  .stories.open .dropdown {
+    display: block;
+  }
 }
 
 
-/* Explore menu */
+/* ===== Explore menu ===== */
 .explore {
   position: relative;
 }
@@ -108,17 +155,17 @@ nav a:hover {
 .explore summary {
   cursor: pointer;
   list-style: none;
-  background: #ffecdf;
-  color: #8c3b1e;
+  background: #ede9f8;
+  color: #7c6bb5;
   padding: 10px 18px;
   border-radius: 20px;
   font-weight: 500;
-  border: 1px solid #fce3d5;
+  border: 1px solid #ddd6f0;
   transition: background 0.2s;
 }
 
 .explore summary:hover {
-  background: #fcd5c2;
+  background: #ddd6f0;
 }
 
 .explore summary::-webkit-details-marker {
@@ -154,39 +201,98 @@ nav a:hover {
   background: #fff5f0;
   color: #8c3b1e;
 }
-
-
-/* Intro */
-main {
-  padding: 50px;
+/* ===== Hero: picture on the left, white card overlapping its edge ===== */
+.hero {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  max-width: 1000px;
+  margin: 30px auto 70px;
 }
 
-main > section:first-child {
-  text-align: center;
-  margin-bottom: 60px;
+/* The picture takes columns 1 to 8 */
+.hero-image {
+  grid-column: 1 / 9;
+  grid-row: 1;
+  display: block;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 16px;
 }
 
-main > section:first-child h2 {
-  font-size: 42px;
-  margin-bottom: 15px;
-  color: #1f1f1f;
+/* The card takes columns 7 to 12, so it overlaps the picture by two columns */
+.hero-card {
+  grid-column: 7 / 13;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  padding: 36px 32px;
+  background: #ffffff;
+  border: 1px solid #f3e5dc;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  text-align: left;
+}
+
+.hero-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  color: #2b2b2b;
   font-family: Georgia, serif;
 }
 
-main > section:first-child h3 {
-  margin: 10px 0;
+.hero-card h3 {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
   font-weight: normal;
-  font-size: 18px;
-  color: #6e6560;
+  color: #8c3b1e;
 }
 
-main > section:first-child p {
-  color: #7a6f68;
-  font-size: 16px;
+.hero-card p {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: #665c56;
 }
 
+.hero-btn {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 22px;
+  background: #1f2937;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
 
-/* Ad Carousel / Featured Banner */
+.hero-btn:hover {
+  background: #111827;
+}
+
+/* Phones: picture on top, card sliding up over its bottom edge */
+@media (max-width: 800px) {
+  .hero-image {
+    grid-column: 1 / -1;
+    height: 240px;
+  }
+
+  .hero-card {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin: -50px 5% 0;
+  }
+}
+
+/* ===== Main + Hero ===== */
+main {
+  padding: 20px 50px 50px;
+}
+
+/* ===== Ad Carousel ===== */
 .carousel-banner-wrapper {
   max-width: 700px;
   margin: 0 auto 70px auto;
@@ -207,7 +313,7 @@ main > section:first-child p {
 .item {
   min-width: 100%;
   box-sizing: border-box;
-  padding: 35px;
+  padding: 0;
   position: relative;
   overflow: hidden;
 }
@@ -220,6 +326,18 @@ main > section:first-child p {
   right: 0;
   height: 4px;
   background: linear-gradient(90deg, #8c3b1e, #d97757);
+}
+
+.carousel-image {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.carousel-text {
+  padding: 20px 35px 30px;
+  text-align: center;
 }
 
 .item h4 {
@@ -243,7 +361,7 @@ main > section:first-child p {
   margin: 0;
 }
 
-/* Carousel Indicator Dots */
+/* Carousel dots */
 .carousel-dots {
   display: flex;
   justify-content: center;
@@ -269,9 +387,56 @@ main > section:first-child p {
 }
 
 
-/* Latest Stories */
+/* ===== Latest Stories ===== */
 .stories-section {
   margin-top: 50px;
+  scroll-margin-top: 90px;
+}
+.stories-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.stories-search {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.stories-search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 16px;
+  border: 1px solid #e2d4cb;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #ffffff;
+  color: #2b2b2b;
+}
+
+.stories-search input:focus {
+  outline: none;
+  border-color: #8c3b1e;
+}
+
+.back-to-home-btn {
+  background: none;
+  border: none;
+  color: #b45309;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.stories-message {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.story-card-wrapper {
+  cursor: pointer;
 }
 
 .stories-section > h2 {
@@ -287,7 +452,7 @@ main > section:first-child p {
 }
 
 
-/* Story card styling support */
+/* ===== Story card ===== */
 .story-card {
   border: 1px solid #f3e5dc;
   border-radius: 16px;
@@ -301,38 +466,26 @@ main > section:first-child p {
   transform: translateY(-4px);
 }
 
-.story-top {
-  padding: 24px;
-  background: #271851;
-  color: white;
-}
-
-.story-top .genre {
-  display: inline-block;
-  margin-bottom: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: #ffffff;
-  color: #2b2b2b;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-.story-top h3 {
-  margin: 0;
-  font-size: 22px;
-  color: #ffb8a3;
+.story-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
 }
 
 .story-bottom {
   padding: 24px;
 }
 
-.story-info {
-  margin: 0 0 12px;
-  font-size: 13px;
-  color: #8c7f76;
+.story-card .genre {
+  display: inline-block;
+  background: #f3f4f6;
+  color: #1f2937;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 .story-bottom h4 {
@@ -358,7 +511,7 @@ main > section:first-child p {
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
-  background: #8c3b1e;
+  background: #1f2937;
   color: white;
   cursor: pointer;
   font-weight: 500;
@@ -366,16 +519,23 @@ main > section:first-child p {
 }
 
 .story-footer button:hover {
-  background: #702e15;
+  background: #111827;
 }
 
+
+/* ===== Creator pitch banner ===== */
 .before-footer {
-  margin-top: 80px;
-  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  max-width: none;
+  padding: 40px 30px;
   text-align: center;
-  background: #ffffff;
-  border-top: 1px solid #f0eae1;
-  border-bottom: 1px solid #f0eae1;
+  background: #fffdf9;
+  border: 1px solid #f3e5dc;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(140, 59, 30, 0.03);
 }
 
 .before-footer h2 {
@@ -389,20 +549,31 @@ main > section:first-child p {
   color: #665c56;
   font-size: 16px;
 }
+.duo-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 30px;
+  margin: 90px 0 60px;
+}
 
+@media (max-width: 900px) {
+  .duo-row {
+    grid-template-columns: 1fr;
+  }
+}
 
-/* --- READER FEEDBACK & GOSSIP BOARD (Companion Box color switched to clean white) --- */
+/* ===== Reader feedback & gossip board ===== */
 .feedback-section {
-  margin-top: 90px;
-  padding: 40px 20px;
-  background: #ffffff; /* Switched from peach to white as requested */
-  border-top: 1px solid #f3e5dc;
-  border-bottom: 1px solid #f3e5dc;
+  padding: 32px 28px;
+  background: #ffffff;
+  border: 1px solid #f3e5dc;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(140, 59, 30, 0.04);
 }
 
 .feedback-container {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
 
 .feedback-header {
@@ -422,7 +593,7 @@ main > section:first-child p {
 }
 
 .feedback-form {
-  background: #fff8f3; /* Input fields container is now peach to contrast with white box */
+  background: #fff8f3;
   padding: 25px;
   border-radius: 16px;
   border: 1px solid #f3e5dc;
@@ -477,7 +648,7 @@ main > section:first-child p {
   background: #702e15;
 }
 
-/* Reader Wall Display */
+/* Reader wall */
 .reader-wall {
   margin-top: 40px;
 }
@@ -534,7 +705,7 @@ main > section:first-child p {
 }
 
 
-/* --- FOOTER --- */
+/* ===== Footer ===== */
 footer {
   padding: 40px 50px;
   background: #1f1f1f;
@@ -590,16 +761,33 @@ footer {
 }
 
 
-/* Mobile Responsiveness */
+/* ===== Mobile ===== */
+/* ===== Mobile ===== */
 @media (max-width: 800px) {
   .stories-grid {
     grid-template-columns: 1fr;
   }
 
-  header,
+  /* Header: brand on top, menu underneath */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+  }
+
   main {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .brand {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .brand h1 {
+    font-size: 1.7rem;
   }
 
   nav {
@@ -624,209 +812,4 @@ footer {
   .submit-btn {
     width: 100%;
   }
-}
-
-/* --- YOUR ORIGINAL STORY CARD STYLES (UNTOUCHED) --- */
-
-/* Target ID 1 (Horror) */
-.story-card.card-1 {
-  background: #f5f5f5 !important;
-  color: #ff3333 !important;
-  border: 1px solid #ff1a1a;
-}
-.story-card.card-1 .story-preview,
-.story-card.card-1 .story-info {
-  color: #0c0c0c !important;
-}
-.story-card.card-1 .story-top {
-  background: #1a0000 !important;
-}
-.story-card.card-1 h3, 
-.story-card.card-1 .story-preview {
-  color: #c11111 !important;
-}
-.story-card.card-1 button {
-  background: #1a0000 !important;
-  color: #d5cbcb !important;
-  font-weight: bold !important;
-}
-.story-card.card-1 button:hover {
-  background: #cc0000 !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 2: COMEDY --- */
-.story-card.card-2 {
-  background: #fffdf5 !important;
-  border-color: #ddc253 !important;
-  color: #451a03 !important; 
-}
-.story-card.card-2 .story-top {
-  background: #d97706 !important;
-}
-.story-card.card-2 .genre {
-  background: #fef3c7 !important;
-  color: #181818 !important;
-}
-.story-card.card-2 button {
-  background: #d97706 !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 3: REAL LIFE --- */
-.story-card.card-3 {
-  background: #ffffff !important;
-  border-color: #38383f !important;
-  color: #27272a !important;
-}
-.story-card.card-3 .story-top {
-  background: #3f3f46 !important; 
-}
-.story-card.card-3 .genre {
-  background: #ffffff !important; 
-  color: #18181b !important;
-}
-.story-card.card-3 button {
-  background: #3f3f46 !important;
-  color: #e3dcdc !important;
-}
-
-/* --- CARD 4: ROMANCE --- */
-.story-card.card-4 {
-  background: #fff0f3 !important;
-  border-color: #2e2d2d !important;
-  color: #d51b66 !important;
-}
-.story-card.card-4 .story-top {
-  background: #e44585 !important; 
-}
-.story-card.card-4 .genre {
-  background: #fce7f3 !important;
-  color: #0d0d0d !important;
-}
-.story-card.card-4 button {
-  background: #e44585 !important;
-  color: #111111 !important;
-}
-
-/* --- CARD 5: FOLKLORE --- */
-.story-card.card-5 {
-  background: #fdfbf7 !important; 
-  border-color: #494947 !important;
-  color: #3b3024 !important;
-}
-.story-card.card-5 .story-top {
-  background: #36453b !important; 
-}
-.story-card.card-5 .genre {
-  background: #f4ebd0 !important;
-  color: #3b3024 !important;
-}
-.story-card.card-5 button {
-  background: #36453b !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 6: FUNNY --- */
-.story-card.card-6 {
-  background: #fff8f5 !important;
-  border-color: #ed5e33 !important;
-  color: #1e1c1c !important;
-}
-.story-card.card-6 .story-top {
-  background: #df3d18 !important; 
-}
-.story-card.card-6 .genre {
-  background: #ffffff !important;
-  color: #0e0d0d !important;
-}
-.story-card.card-6 button {
-  background: #ea3a12 !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 7: COMMUNITY --- */
-.story-card.card-7 {
-  background: #fff9f5 !important;
-  border-color: #c75614 !important;
-  color: #4a2e1b !important;
-}
-.story-card.card-7 .story-top {
-  background: #8c3b1e !important; 
-}
-.story-card.card-7 .genre {
-  background: #ffecdf !important;
-  color: #131313 !important;
-}
-.story-card.card-7 button {
-  background: #8c3b1e !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 8: MYSTERY --- */
-.story-card.card-8 {
-  background: #ffffff !important; 
-  border-color: #1e293b !important;
-  color: #f8fafc !important;
-}
-.story-card.card-8 .story-top {
-  background: #8d9096 !important; 
-}
-.story-card.card-8 .genre {
-  background: #f8fbfc !important; 
-  color: #070707 !important;
-  font-weight: bold;
-}
-.story-card.card-8 .story-top h3 {
-  color: #0e0e0e !important;
-}
-.story-card.card-8 .story-preview,
-.story-card.card-8 .story-info {
-  color: #0c0c0c !important;
-}
-.story-card.card-8 button {
-  background: #080808 !important;
-  color: #ffffff !important;
-}
-
-/* --- CARD 9: RANDOM --- */
-.story-card.card-9 {
-  background: #faf5ff !important;
-  border-color: #151415 !important;
-  color: #3b0764 !important;
-}
-.story-card.card-9 .story-top {
-  background: #33045c !important;
-}
-.story-card.card-9 .genre {
-  background: #e9d5ff !important;
-  color: #0b0b0b !important;
-}
-.story-card.card-9 button {
-  background: #7c0edd !important;
-  color: #ffffff !important;
-}
-
-/* --- POLISHED CREATOR PITCH BANNER (WORDS UNTOUCHED) --- */
-.before-footer {
-  margin: 60px auto;
-  max-width: 800px;
-  padding: 40px;
-  text-align: center;
-  background: #fffdf9; /* Soft, warm inner card tint */
-  border: 1px solid #f3e5dc;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(140, 59, 30, 0.03);
-}
-
-.before-footer h2 {
-  font-size: 26px;
-  color: #2b2b2b;
-  margin-bottom: 10px;
-}
-
-.before-footer p {
-  margin: 8px 0;
-  color: #665c56;
-  font-size: 16px;
 }

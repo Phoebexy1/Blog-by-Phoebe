@@ -6,17 +6,16 @@ interface StoryCardContent {
     readTime: string;
     title: string;
     preview: string;
+    image?: string;
     onClick?: () => void;
 }
 
 function StoryCard({
     id,
     genre,
-    heading,
-    date,
-    readTime,
     title,
     preview,
+    image,
     onClick
 }: StoryCardContent) {
     return (
@@ -25,17 +24,11 @@ function StoryCard({
             // onClick={(e) => {
             //                 e.stopPropagation(); // Prevents double-firing with the parent card
             //             }}
-            style={{ cursor: "pointer" }}
         >
-            <div className="story-top">
-                <span className="genre">{genre}</span>
-                <h3>{heading}</h3>
-            </div>
+            {image && <img className="story-image" src={image} alt={title} />}
 
             <div className="story-bottom">
-                <p className="story-info">
-                    {date} &nbsp; • &nbsp; {readTime}
-                </p>
+                <span className="genre">{genre}</span>
 
                 <h4>{title}</h4>
 
