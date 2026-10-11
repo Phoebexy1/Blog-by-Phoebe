@@ -21,7 +21,11 @@ function EmailSection() {
   return (
     <section className="email-section">
       <div className="email-container">
-        <img className="email-image" src="/images/newsletter.jpg" alt="Newsletter envelope" />
+        <img
+          className="email-image"
+          src="/images/newsletterrr.jpg"
+          alt="Letters, an open notebook, and a pen on a writing desk"
+        />
 
         <h2>Never Miss a Story</h2>
         <p>Get new stories and juicy gossip in your inbox.</p>

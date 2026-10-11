@@ -104,8 +104,8 @@ function FeedbackBoard() {
         <div className="reader-wall">
           <h3>Recent Reader Voices</h3>
           <div className="wall-grid">
-            {submissions.map((sub, index) => (
-              <div className="wall-card" key={index}>
+            {submissions.slice(0, 3).map((sub, index) => ( 
+             <div className="wall-card" key={index}>
                 <div className="wall-card-header">
                   <span className="wall-author">{sub.name}</span>
                   <span className="wall-badge">{sub.category}</span>

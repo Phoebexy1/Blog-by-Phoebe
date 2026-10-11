@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import "./App.css";
 import { localStories } from "./data/stories";
 import Footer from "./components/footer";
@@ -10,6 +10,7 @@ import EmailSection from "./components/emailsection";
 import Jokes from "./components/jokes";
 import FeedbackBoard from "./components/feedbackboard";
 import StoriesSection from "./components/storiessection";
+import FeaturedActions from "./components/featuredactions";
 
 const featuredItems = [
   {
@@ -17,31 +18,55 @@ const featuredItems = [
     title: "Stash by Phoebeee is coming soon!",
     text: "Essentials every 9–5er needs, available at the snap of their fingers.",
     image: "/images/stash.jpg",
-    buttonText: "Notify me",
     link: "#newsletter",
   },
   {
     label: "Travel Bee",
-    title: "Travel with Phoebee — First Edition",
+    title: "Travel with Phoebee - First Edition",
     text: "Pack your bags and come see the world with me! Our exclusive curated group getaways are launching next month.",
     image: "/images/travelwithphoebe.jpg",
-    buttonText: "Join the waitlist",
-    link: "mailto:beverlymichaels977@gmail.com?subject=Travel%20with%20Phoebee%20waitlist",
   },
   {
     label: "Community",
     title: "Join The Companion Book Club",
     text: "Monthly cozy reads, juicy discussions and slumber parties with Phoebe and friends.",
     image: "/images/bookclub.jpg",
-    buttonText: "Join the club",
-    link: "mailto:beverlymichaels977@gmail.com?subject=Book%20club",
   },
 ];
  // Finds your own stories for a category
 const getLocalStoriesFor = (categoryTitle: string) =>
   localStories.filter((s) => s.category === categoryTitle);
+// Fallback pictures for stories that arrive from the server without an image
+const categoryImages: Record<string, string[]> = {
+  "Folklore": ["/images/tortoise.jpg", "/images/anansi.jpg", "/images/anansi.jpg", "/images/sky.jpg", "/images/leopard.jpg"],
+  "Horror": ["/images/readreceipt.png", "/images/soundproof.jpg", "/images/deepsea.jpg", "/images/koikoi.png","/images/nightrunner.jpg"],
+  "Romance": ["/images/romance.jpg", "/images/heartbreak.jpg"],
+  "Real Life": ["/images/bus.jpg"],
+  "Gossip": ["/images/gossip.jpg"],
+  "Fashion & Beauty": ["/images/eyelashes.jpg", "/images/red.jpg", "/images/shoes.jpg", "/images/lipstick.jpg"],
+  "Travel & Lifestyle": ["/images/vacationcollage.jpg", "/images/diet.jpg", "/images/corporate.jpg"], 
+};
+
+// Picks a picture for the story at position idx in its category
+const getFallbackImage = (categoryTitle: string, idx: number) => {
+  const pics = categoryImages[categoryTitle];
+  return pics ? pics[idx % pics.length] : undefined;
+};
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    const savedTheme = localStorage.getItem("phoebe-theme");
+    return savedTheme === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("phoebe-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"));
+  };
  
   // Stories State
   const [stories, setStories] = useState(localStories);
@@ -71,7 +96,8 @@ function App() {
             id: story.id || idx + 1,
             genre: assignedGenre,
             heading: story.heading || story.title || categoryTitle,
-            preview: story.preview || story.snippet || story.content?.slice(0, 80) + "..." || "Click to read full story..."
+            preview: story.preview || story.snippet || story.content?.slice(0, 80) + "..." || "Click to read full story...",
+            image: story.image || getFallbackImage(categoryTitle, idx),
           };
         });
         setStories(mappedData);
@@ -105,13 +131,18 @@ function App() {
         handleResetToHome={handleResetToHome}
         fetchStoriesFromApi={fetchStoriesFromApi}
         handleJokesNavClick={handleJokesNavClick}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
 
     <main>
         <div className="top-area">
           <Hero />
 
-          <Carousel featuredItems={featuredItems} />
+          <div className="featured-row">
+            <Carousel featuredItems={featuredItems} />
+            <FeaturedActions />
+          </div>
         </div>
 
         {/* Stories Grid Section */}

@@ -1,4 +1,4 @@
-.jokes-api-section {
+/*.jokes-api-section {
   margin: 4rem 0 3rem;
   padding: 0 1.5rem;
   scroll-margin-top: 100px;
@@ -9,17 +9,17 @@
   margin: 0 auto;
   padding: 32px 28px;
   text-align: center;
-  background: #ffffff;
-  border: 1px solid #f3e5dc;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(140, 59, 30, 0.06);
+  box-shadow: 0 4px 20px var(--shadow);
 }
 
 .jokes-badge {
   display: inline-block;
   padding: 4px 12px;
-  background: #ffecdf;
-  color: #8c3b1e;
+  background: rgba(249, 166, 109, 0.15);
+  color: var(--accent);
   font-size: 12px;
   font-weight: bold;
   border-radius: 999px;
@@ -28,28 +28,28 @@
 .jokes-header h2 {
   margin: 14px 0 6px;
   font-size: 24px;
-  color: #2b2b2b;
+  color: var(--heading);
 }
 
 .jokes-header p {
   margin: 0 0 20px;
   font-size: 14px;
-  color: #665c56;
+  color: var(--muted);
   line-height: 1.6;
 }
 
 .joke-display-box {
   margin-bottom: 20px;
   padding: 22px 20px;
-  background: #fff8f3;
-  border: 1px solid #f3e5dc;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
 }
 
 .joke-display-box p {
   font-size: 16px;
   font-style: italic;
-  color: #2b2b2b;
+  color: var(--text);
   line-height: 1.7;
 }
 
@@ -60,4 +60,403 @@
 .joke-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+}   */
+   .jokes-api-section {
+  margin: 1.5rem 0 1.5rem;
+  padding: 0 1.5rem;
+  scroll-margin-top: 80px;
+}
+
+/* Compact card: everything is sized so the whole section fits on one screen */
+.jokes-card {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 40px 26px;
+  text-align: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 4px 20px var(--shadow);
+  overflow: hidden;
+}
+
+.jokes-header,
+.joke-stage,
+.joke-btn {
+  position: relative;
+  z-index: 1;
+}
+
+.jokes-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  background: rgba(249, 166, 109, 0.15);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 999px;
+}
+
+.jokes-header h2 {
+  margin: 8px 0 2px;
+  font-size: 26px;
+  color: var(--heading);
+}
+
+.jokes-header p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ---------- Big faded card suits in the corners ---------- */
+
+.suit {
+  position: absolute;
+  z-index: 0;
+  font-size: 54px;
+  line-height: 1;
+  color: var(--heading);
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.suit.red {
+  color: #d62f3a;
+  opacity: 0.16;
+}
+
+.suit-tl { top: 10px;    left: 20px;  transform: rotate(-14deg); }
+.suit-tr { top: 10px;    right: 20px; transform: rotate(12deg); }
+.suit-bl { bottom: 10px; left: 20px;  transform: rotate(10deg); }
+.suit-br { bottom: 10px; right: 20px; transform: rotate(-12deg); }
+
+/* ---------- Stage: joke box + joker + cards ---------- */
+
+.joke-stage {
+  /* The joker's size follows the height of the window, so shorter screens get a smaller joker */
+  --joker-w: clamp(120px, 23vh, 200px);
+  /* Room above the box for the joker (his height is about 1.16 x his width) */
+  margin-top: calc(var(--joker-w) * 1.16 + 6px);
+  margin-bottom: 18px;
+}
+
+.joker {
+  position: absolute;
+  left: 50%;
+  /* His elbows sit right on the top edge of the box */
+  bottom: calc(100% - 3px);
+  width: var(--joker-w);
+  margin-left: calc(var(--joker-w) / -2);
+  z-index: 3;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+}
+
+.joker svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Little bounce each time a new joke arrives (only after the person taps) */
+@keyframes joker-laugh {
+  0%   { transform: translateY(0) rotate(0); }
+  20%  { transform: translateY(-8px) rotate(-2.5deg); }
+  40%  { transform: translateY(0) rotate(2deg); }
+  60%  { transform: translateY(-5px) rotate(-1.5deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+
+.joker-laugh {
+  animation: joker-laugh 0.7s ease-out;
+}
+
+/* Playing cards propped on the top edge of the box, sized from the joker */
+.play-card {
+  --cw: calc(var(--joker-w) * 0.44);
+  position: absolute;
+  bottom: calc(100% - 3px);
+  width: var(--cw);
+  height: calc(var(--cw) * 1.42);
+  background: #fffaf0;
+  border: 1.5px solid #1d1330;
+  border-radius: calc(var(--cw) * 0.12);
+  box-shadow: 3px 4px 0 rgba(29, 19, 48, 0.18);
+  color: #1d1330;
+  transform-origin: 50% 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.play-card.is-red {
+  color: #d62f3a;
+}
+
+.pc-rank {
+  position: absolute;
+  top: calc(var(--cw) * 0.08);
+  left: calc(var(--cw) * 0.1);
+  font-size: calc(var(--cw) * 0.2);
+  font-weight: bold;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.pc-pip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--cw) * 0.5);
+}
+
+.pc-l1 { left: 7%;  transform: rotate(-16deg); }
+.pc-l2 { left: 17%; transform: rotate(-5deg); }
+.pc-r1 { right: 17%; transform: rotate(5deg); }
+.pc-r2 { right: 7%;  transform: rotate(16deg); }
+
+/* ---------- Colours: change these lines to recolour the joke box and button ---------- */
+
+.jokes-card {
+  --joke-bg: #1f2937;        /* joke box background (same navy as your Subscribe button) */
+  --joke-border: #111827;    /* outline of the box */
+  --joke-text: #f3f4f6;      /* joke text */
+  --joke-shadow: #f9a66d;    /* offset shadow behind the box and button (your orange accent) */
+  --joke-accent: #fbbf77;    /* quote mark and "HA HA!" */
+  --btn-bg: #1f2937;         /* button */
+  --btn-bg-hover: #111827;   /* button on hover */
+  --btn-text: #ffffff;       /* button text */
+}
+
+/* ---------- The joke box: navy, bold outline, doodles ---------- */
+
+.joke-display-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 124px;
+  padding: 30px 90px 32px;
+  background: var(--joke-bg);
+  border: 3px solid var(--joke-border);
+  border-radius: 16px;
+  box-shadow: 6px 7px 0 var(--joke-shadow);
+  overflow: hidden;
+}
+
+/* Big quote mark in the top-left corner */
+.joke-display-box::before {
+  content: "\201C";
+  position: absolute;
+  top: 2px;
+  left: 20px;
+  z-index: 1;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--joke-accent);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.joke-display-box p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--joke-text);
+  line-height: 1.6;
+}
+
+.fade-loading {
+  opacity: 0.4;
+}
+
+/* ---------- Doodles scattered around the edges of the box ---------- */
+
+.doodles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.dd {
+  position: absolute;
+  display: block;
+}
+
+.dd-star1  { left: 3%;   top: 40%;    width: 26px; transform: rotate(-12deg); }
+.dd-star2  { right: 4%;  top: 46%;    width: 20px; transform: rotate(10deg); }
+.dd-squig  { right: 4%;  top: 12%;    width: 64px; transform: rotate(8deg); }
+.dd-spiral { left: 4%;   bottom: 9%;  width: 38px; }
+.dd-bolt   { right: 6%;  bottom: 11%; width: 22px; transform: rotate(10deg); }
+.dd-zig    { left: 22%;  bottom: 8px; width: 64px; }
+
+.dd-ha {
+  right: 22%;
+  bottom: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  color: var(--joke-accent);
+  transform: rotate(-5deg);
+}
+
+.dd-what {
+  left: 19%;
+  top: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: normal;
+  color: #86d6c0;
+  transform: rotate(8deg);
+}
+
+.dd-conf {
+  border: none;
+}
+
+/* Button matches the box: same navy as your Subscribe button */
+.jokes-card .joke-btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-weight: bold;
+  border: 2.5px solid var(--joke-border);
+  box-shadow: 4px 4px 0 var(--joke-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.jokes-card .joke-btn:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 6px 0 var(--joke-shadow);
+}
+
+.jokes-card .joke-btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 var(--joke-shadow);
+}
+
+.jokes-card .joke-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ---------- Short windows (small laptops): trim the header so everything still fits ---------- */
+
+@media (max-height: 720px) {
+  .jokes-card {
+    padding-top: 14px;
+    padding-bottom: 20px;
+  }
+
+  .jokes-header p {
+    display: none;
+  }
+
+  .jokes-header h2 {
+    font-size: 24px;
+  }
+
+  .joke-stage {
+    margin-bottom: 14px;
+  }
+}
+
+@media (max-height: 600px) {
+  .jokes-badge {
+    display: none;
+  }
+
+  .jokes-header h2 {
+    margin-top: 0;
+  }
+}
+
+/* ---------- Smaller screens (phones) ---------- */
+
+@media (max-width: 720px) {
+  .jokes-api-section {
+    padding: 0 1rem;
+  }
+
+  .jokes-card {
+    padding: 18px 16px 22px;
+  }
+
+  .jokes-header h2 {
+    font-size: 23px;
+  }
+
+  .jokes-header p {
+    font-size: 13px;
+  }
+
+  .suit {
+    font-size: 36px;
+  }
+
+  .joke-stage {
+    --joker-w: clamp(100px, 17vh, 150px);
+  }
+
+  .pc-l1 { left: 1%; }
+  .pc-l2 { left: 11%; }
+  .pc-r1 { right: 11%; }
+  .pc-r2 { right: 1%; }
+
+  .joke-display-box {
+    min-height: 108px;
+    padding: 34px 20px 26px;
+  }
+
+  .joke-display-box p {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .joke-display-box::before {
+    font-size: 52px;
+    left: 12px;
+  }
+
+  /* Keep doodles on the top and bottom edges so they never sit on the text */
+  .dd-star1,
+  .dd-star2,
+  .dd-conf {
+    display: none;
+  }
+
+  .dd-squig  { width: 48px; top: 8px; }
+  .dd-spiral { width: 28px; }
+  .dd-bolt   { width: 18px; }
+  .dd-zig    { left: 26%; width: 50px; }
+  .dd-what   { left: 30%; font-size: 18px; }
+  .dd-ha     { right: 24%; font-size: 12px; }
+}
+
+@media (max-width: 440px) {
+  /* Keep only the inner card on each side so the joker has room */
+  .pc-l1,
+  .pc-r2 {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joker-laugh {
+    animation: none;
+  }
+
+  .jokes-card .joke-btn {
+    transition: none;
+  }
 }

@@ -1,4 +1,22 @@
 :root {
+  --bg: #ffffff;
+  --page-bg: #ffffff;
+  --card-bg: #ffffff;
+  --panel-bg: #ffffff;
+  --panel-strong: #f3f4f6;
+  --header-bg: #ffffff;
+  --text: #2b2b2b;
+  --muted: #665c56;
+  --heading: #1a1a1a;
+  --accent: #8c3b1e;
+  --accent-strong: #1f2937;
+  --border: #f3e5dc;
+  --shadow: rgba(140, 59, 30, 0.06);
+  --button-text: #ffffff;
+  --search-bg: #ffffff;
+  --footer-bg: #1f1f1f;
+  --footer-text: #b5a8a0;
+
   /* Base text size. Your rem sizes in App.css depend on this. */
   font: 18px/145% system-ui, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.18px;
@@ -6,6 +24,26 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme='dark'] {
+  --bg: #111827;
+  --page-bg: #0f172a;
+  --card-bg: #1f2937;
+  --panel-bg: #1d2434;
+  --panel-strong: #2b3443;
+  --header-bg: #111827;
+  --text: #f3f4f6;
+  --muted: #d1d5db;
+  --heading: #f9fafb;
+  --accent: #f9a66d;
+  --accent-strong: #93c5fd;
+  --border: #334155;
+  --shadow: rgba(15, 23, 42, 0.5);
+  --button-text: #111827;
+  --search-bg: #0b1220;
+  --footer-bg: #0b1120;
+  --footer-text: #d5c9c4;
 }
 
 @media (max-width: 1024px) {

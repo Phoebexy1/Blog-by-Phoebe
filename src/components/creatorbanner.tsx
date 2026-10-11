@@ -9,4 +9,4 @@ function CreatorBanner() {
   );
 }
 
-export default CreatorBanner;
+export default CreatorBanner; 
